@@ -5,11 +5,11 @@ git init
 -all
 ls -a
 
+
 ls .git/
 
 
-lec19
-
+lec19.  gitリポジトリのコピーを作成する
 git clone https://github.com/atom/atom.git
 
 lec20
@@ -17,15 +17,15 @@ git add .        -全て
 git add index.html
 
 
-lec21
-git commit -v
+lec21 
+git commit -v     #変更内容をeditorで確認することができる
 git commit -m "メッセージ"
 
 lec22
 git status
 
-lec23
-git diff
+lec23 何をしたのかを確認する
+git diff 
 git diff <ファイル名>
 
 #git addした後の変更分
@@ -41,13 +41,306 @@ git log -p index.html
 
 git log -n <コミット数>
 
+lec25
+git rm <ファイル削除>
+git rm -r <ディレクトリ名>
+git rm --cached <ファイル名>
+
+git reset HEAD <ファイル名>
+ファイルへの変更を取り消す
+git checkout index.html
+
+lec26 ファイルの移動を記録する　
+git mv <旧ファイル名><新ファイル名>
+
+20220810
+lec27 リモートリポジトリ(GitHub)を新規追加する
+※アクセストークンを生成 - https://tinyurl.com/2homxtuk - 90日
+アクセストークン admin:    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
+=>  paswordにアクセストークンを入力する
+git remote add origin URL
+リモートリポジトリ(GitHub)へ送信する
+git push <リモート名><ブランチ名>        git push origin master
+git push -u origin master       (-uは何かと いう と この オプション を 付け て おく と 、 次回 以降 、 オリジン マスター を プッシュ する 時 に GITPUSH だけ で プッシュ できる よう に なる ため の ものです 。 初回 に プッシュ する 時 だけ 付け て おく と 、 今後 楽 に なる ので 付け て おい て ください)
+
+★lec29. コマンドにエイリアスをつける
+例: commitコマンドをciという別名で起動できるようにする
+git config --global alias.ci commit      --globalをつけるとPC全体の設定となる
+
+例えばstのエイリアスを削除したい場合は
+ git config --global --unset alias.st
+
+lec30. gitignoreファイルの使用方法
+touch secret.txt     からファイルを作成
+
+lec31 ファイルの変更を取り消す
+※ "--"を付けているのは、ブランチ名とファイル名がかぶったときに、どちらを指しているのかGitがわからなくなるのを防ぐため
+git checkout -- <ファイル名>
+git checkout -- <ディレクトリ名>
+
+#全変更を取り消す
+git checkout -- .       .は全てという意味 `.` というのは、「現在いるディレクトリ以下の全てのファイル」を指します。
+
+
+lec32. ステージした変更を取り消す
+※指定した変更をステージから取り消すだけなので、ワークツリーのファイル(ローカルのファイル)には影響を与えない
+git reset HEAD <ファイル名> 
+git reset HEAD <ディレクトリ名>
+#全変更を取り消す - 
+git reset HEAD .
+
+lec33. 直前のコミットをやり直す
+git commit --amend     ※リモートリポジトリにPushしたコミットはやり直してはいけない
+
+
+lec34  リモートを表示する
+git remote
+git remote -v    #対応するurlを表示 
+
+lec35. リモートリポジトリを新規追加する
+git remote add <リモート名>
+例: git remote add bak https://github~~~/repo.git
+
+git push -u bak master
+
+★lec36. リモートから情報を取得する(フェッチ)
+# GIT フェッチ コマンド を する と 、 リモート という リモート ブランチ の 方 に 情報 が 格納 さ れ て そちら に 情報 を 取得 すること が でき まし た 
+# フェッチを 使っ た 場合 、 まず GIT フェッチ で ローカルリポジトリ に 情報 を 取得 し て き て 、 その 情報 を ワーク ツリー に 反映 さ せ たい 場合 は 、 GIT マージ コマンドを 使っ て いき ます 
+git fetch <リモート名>
+例  git fetch origin
+git branch -a     # -aはallの略
+git checkout remotes/origin/master # この リモート スラッシュ オリジン 、 スラッシュ マスター ブランチ の 方 に自分 の ワーク ツリー の 内容 を 切り替える という こと を やっ て い ます 
+cat home.html   ファイルの中身を確認できる
+git merge orign/master     #最後 に 取得 し て き た リモート リポジトリ の 情報 を ワーク ツリー の 方 に 取り込む
+
+lec37. リモートから情報を取得する(プル)
+=> リモートから情報を取得してマージまでを一度にやりたいときに使用
+=>  ワーク ツリー に まで 一 度 に 変更 を 反映 さ せ たい 場合 は 、 GIT プル を 使っ て み て ください 。 
+git pull <リモート名><ブランチ名>
+例 git pull origin master
+
+#上記コマンドは省略可能
+git pull
+
+#これは下記コマンドと同じこと
+git fetch origin master
+git merge origin/master
+
+★lec38 フェッチとプルを使い分ける
+プルの場合、自分がいるブランチに統合されてしまう!!要注意 フェッチ推奨
+https://tinyurl.com/2jeg4thb
+
+lec39 リモートの詳細情報を表示する
+git remote show <リモート名>
+例. git remote show origin
+
+lec40 リモート名の変更及びリモートリポジトリの削除
+※github上からは削除されない あくまでgithub上のリモートリポジトリにアクセスするための情報を削除するにとどまる
+git remote rename <旧リモート名> <新リモート名>
+例.  git remote rename tutorial new_tutorial
+
+# 削除
+git remote rm <リモート名>
+git remote rm new_tutorial
+
+lec43. ブランチを新規追加する ※ブランチを作成するだけでブランチの切り替えまでは行わない
+git branch <ブランチ名>
+例: git branch feature
+
+ブランチ一覧を表示する
+git branch 
+git branch -a
+
+* どの ブランチ が どの コミット を 指し て いる か という こと は 、 ハイフン ハイフンデコレート オプション で 確認 する こと が でき ます 
+git log --oneline --decorate
+
+lec44. ブランチを切り替える
+git checkout <既存ブランチ名>
+例: git checkout feature
+
+#ブランチを新規作成して切り替える
+git checkout -b <新ブランチ名>.       -b オプションは branchの略
+
+lec45   ブランチをマージする - マージとは他の人の変更内容を取り込む作業のこと
+変更履歴をマージする
+※ 作業中のブランチにマージする!
+git merge <ブランチ名>
+git merge <リモート名/ブランチ名>
+git merge origin/master
+
+★マージは3種類ある
+Fast Forward: 早送りになるマージ 枝分かれなし - ブランチのポインタを前にすすめるだけ
+Auto Merge: 基本的なマージ - 枝分かれして開発していた場合、マージコミットという新しいコミットを作る
+コンフリクト:
+
+★lec46 コンフリクトの解決
+コンフリクトとは何かというと、複数人の人が同じ箇所で別々の変更をしちゃった時に、どの変更を優先したらいいか分からないという状態のことをコンフリクトといいます。
+
+lec47
+lec48. ブランチを変更、削除する
+自分が作業しているブランチの名前を変更する
+git branch -m <ブランチ名>      ※ -m は moveの略
+例: git branch -m new_branch
+
+削除する
+# masterにマージされていない変更が残っている場合、削除しないよ
+git branch -d <ブランチ名>
+例: git branch -d feature    -d は deleteの略
+
+# 強制削除する
+git branch -D <ブランチ名>
+
+lec49  ブランチを利用した開発の流れ
+
+lec50 リモートブランチとは - リモートのブランチの状態へのポインタ
+=> 
+git branch -a
+remotes/origin/master、このブランチの内容を参照したり、このブランチの内容を使いたい場合、例えばGITマージする際とかはremotes/は別に付けなくて大丈夫です。あくまでオリジンスラッシュフィーチャーやオリジンスラッシュマスターという形でマージしたりすることができます。このようにGITフェッチしてくるとフェッチしてきた内容というのは、オリジンスラッシュブランチ名の形で保存されていることを頭の片隅に置いておいてください。
+
+★lec51. プルリクエストの流れ
+https://tinyurl.com/2ku4g3bq
+
+★. fetchしたリモートリポジトリのmasterブランチをローカルのmasterブランチにする方法 - conflictが起きたときに有効: 
+=> これでoriginのmaster = GITHUBにあるmasterから、自分のmasterブランチを作成することができます
+git branch master origin/master    #結果: Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+★lec52 GitHub Flow フロー https://tinyurl.com/2nh86uz8
+github上でプルリクエストを完了し、mergeしたら、ローカルの方でgithub上の最新のmasterをプルし、ローカルの不要になったプルリクエスト済みのbranchを削除する
+git checkout master     #masterブランチに移動
+git pull origin master    #github上の最新のmasterをpull
+git branch -d github_flow   #ローカルの不要になったプルリクエスト済みのbranchを削除
+
+20220811
+★lec54. リベースで履歴を整えた形で変更を統合する. https://tinyurl.com/2jhjc8ob
+git rebase <ブランチ名>      ブランチの起点となるコミットを別のコミットに移動する
+リベースとマージの違いというのは、履歴は一直線なのか。履歴は枝分かれしているかという点なんですね。なので他のブランチの内容を取り込みたくて、しかもその時に履歴をきれいに整えたい時はDBASEコマンドを使うようにしてみてください
+
+まずフィーチャーブランチの方にマスターブランチの内容をリベースで取り込んでいきます。今、自分のいるブランチはフィーチャーブランチのはずなので、ブランチ名に移動はしなくて大丈夫です。
+
+次にマスタープラン全方にフィーチャーブランチの内容をパストフォワードで取り込んでいきます。
+
+■ファストフォワードを無効にする設定
+git config --global merge.ff false        ※ff をは fast fowardのこと
+
+★lec55 リベースでしてはいけないこと
+=> GitHubにプッシュしたコミットをリベースするのはNG
+=> git push -f は絶対NG.      ※ -f はforce 強制push
+
+★lec56  リベースとマージのどちらを使う?
+プッシュしていないローカルの変更にはリベースを使い、プッシュした後はマージを使おう
+コンフリクト思想なときはマージを使おう
+もう一つコンフリクトしそうな場合は、マージを使うようにしています。このコンフリクトしそうかどうかどうやったらわかるかというと、2つ方法があって、まず1つ目にチームで開発している場合は、他の人がどのような変更を今したのかというのを大体把握しておいて、それでコンフリクトしそうかどうかを判断します。ただ、他の人は何を変更しているかよく把握できてない。そういうケースも多いので、そういう場合は2つ目の方法、一回ローカルの変更をGITHUBにプッシュしてプルリクエストを先に作成してしまいます。するとGITHUBは親切なのでコンフリクトしている場合、GITHUB上でコンフリクトしているよというアラートを表示してくれます。それを見てコンフリクトしてるっていうアラートが出たら、その場合はマージを使って変更内容を取り込むようにしています。
+
+lec57 プルの設定をリベースに変更する方法 
+2種類 - プルのマージ型  / プルのリベース型
+プルのマージ型 - マージコミットが残るから、マージしたという記録を残したい場合に使う
+git pull <リモート名> <ブランチ名>
+git pull origin master
+
+プルのリベース型 - マージコミットが残らないからGitHubの内容を取得したいだけのときは、 --rebaseを使おう
+git pull --rebase <リモート名> <ブランチ名>
+git pull --rebase origin master
+
+例えば今自分がマスターブランチにいて、GITHUB上のマスターブランチの最新の情報を取得してきたとしますね。その時にGITプルーで取得すると、単純にマスターブランチは最新の状況を取ってきたいだけだにもかかわらず、マージコミットが残ってしまいます。ただ、特に何かを変更したわけでもないので、マージコミットは必要ではありません。そういう時にGITプルハイフンハイフンrebaseオリジンマスターという風にすることでリリースするので、マージコミットを残さずにGITHUBの内容をワークツリーの方に取得してくることができます。なのでGITHUB上のマスターブランチの最新の内容を取得してくれるであったりとか、そういったGITHUBの内容を単純に取得したいだけの時は、reabase型を使うのがお勧めです。
+
+★プルをリベース型に標準設定する
+git config --global pull.rebase true
+
+# ★masterブランチでgit pullするときだけ
+git config branch.master.rebase true    ※ --rebaseオプションを付けなくても git pullの挙動がリベース型になる
+
+★lec58 リベースで履歴を書き換える
+※GitHubにPushしていないコミットを整える時にのみ適用する
+復習: 直前のコミットをやり直す
+git commit --amend    ※リモートブランチにPushしたコミットはやり直してはいけない
+
+★複数のコミットをやり直す
+※ -i は --interactiveの略　対話的リベースといって、やり取りしながら履歴を変更していく
+git rebase -i <コミットID>     
+git rebase -i HEAD~3
+
+★★難解 - lec59 コミットを並び替える、削除する
+git log --oneline -n 3   最新3つのコミットを確認
+git rebase -i <コミットID>     
+git rebase -i HEAD~3
+
+コミットをまとめる
+editor上でsquashを指定する
+
+コミットを分割する
+git reset HEAD^      # git resetコマンドというのがコミットを取り消してステージングしてない状況にまで戻すコマンド
+git add README
+git commit -m 'README修正'
+git add index.html
+git commit -m 'index.html修正'
+git rebase --continue
+
+lec60. タグの一覧を表示する
+git tag
+# パターンを指定してタグを表示
+git tag -l "201705"     #git tagコマンドはアルファベット順にタグを表示する
+
+★lec61.  タグを作成する
+注釈付きタグ(タグの名前、コメント、署名をつけることができる)
+git tag -a [タグ名] -m "[メッセージ]"   # -a は anotateの略
+
+軽量版タグ(名前しか付かない)
+git tag [タグ名]
+git tag 20170520_01
+
+# 後からタグ付けする(過去のコミットにタグを付ける場合)
+git tag [タグ名] [コミット名]
+git tag 20170520_01 8a6cbc4
+※ オプションを付けないと軽量版タグを作成する
+
+タグのデータを表示する
+git show [タグ名]
+git show 20170520_01
+
+★lec62 タグをリモートに送信する
+git push コマンドで別途指定する
+git push [リモート名] [タグ名]
+git push origin 20220811_01
+
+# タグを一斉に送信する
+git push origin --tags     # --tagsを付けるとローカルにあってリモートリポジトリに存在しないタグを一斉に送信する
+
+★lec63.   作業を一時避難する
+git stash
+git stash save   <= saveは省略可能. stashは隠すという意味
+それをgit addでステージにアップしたとします。こういう状況でまだコミットするほどまでは作業は完了しないけど、急遽バグが起きて別のブランチは作業しないといけなくなった。そういう時にこれらの変更を1時避難すルタ目のコマンドがGITスタッシュコマンドです。GITスタッシュコマンドを使うことで、変更文をスタッシュに1時避難させます。これ何が起こっているかというと、GITスタッシュと入力することで、INDEX.HTMLの変更とtop.HTMLの変更をスタッシュという場所に1時格納させます。そして、ワークツリーとステージの変更は無かったことにすることで、別のブランチへ作業をすることを可能にします。これがGITスタッシュになります。
+
+★lec64.  避難した作業を確認する
+git stash list  飛散した作業の一覧を表示する
+
+★lec65.  避難した作業を復元する
+#最新の作業を復元する
+git stash apply
+#ステージの状況も復元する
+git stash apply --index
+
+#特定の作業を復元する
+git stash apply [スタッシュ名]
+git stash apply stash@{1}
+
+
+★lec65.  避難した作業を削除する
+# 最新の作業を削除する
+git stash drop
+
+#特定の作業を削除する
+git stash drop [スタッシュ名]
+git stash drop stash@{1}
+
+# 全作業を削除する
+git stash clear
 
 
 
 
 
 
-
+ 
 
 
 
