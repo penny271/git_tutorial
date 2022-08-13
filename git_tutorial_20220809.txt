@@ -298,7 +298,7 @@ git show [タグ名]
 git show 20170520_01
 
 ★lec62 タグをリモートに送信する
-git push コマンドで別途指定する
+git pushコマンドで別途指定する
 git push [リモート名] [タグ名]
 git push origin 20220811_01
 
